@@ -38,13 +38,13 @@ const CategoryPage: React.FC<categoryProps> = async ({
   return (
     <div className="bg-white">
       <Container>
-        <Billboard billboardData={category.billboard} />
+        {/* <Billboard billboardData={category.billboard} /> */}
         <div className="px-4 sm:px-6 lg:px-8 pb-20">
           <div className="lg:grid lg:grid-cols-5 lg:gap-x-6">
-            <MobileFilters colors={colors} sizes={sizes} />
+            {/* <MobileFilters colors={colors} sizes={sizes} /> */}
             <div className="lg:block hidden">
-              <Filter valueKey="sizeCode" name="Sizes" data={sizes} />
-              <Filter valueKey="colorCode" name="Colors" data={colors} />
+              {/* <Filter valueKey="sizeCode" name="Sizes" data={sizes} /> */}
+              {/* <Filter valueKey="colorCode" name="Colors" data={colors} /> */}
             </div>
             <div className=" mt-6 lg:mt-0 lg:col-span-4">
               {products.length === 0 && <NoResults />}
