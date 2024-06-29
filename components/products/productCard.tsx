@@ -9,6 +9,7 @@ import ButtonIcon from '@/components/ui/IconButton'
 import Currency from '@/components/products/currency'
 import usePreviewModal from '@/lib/state/ModalState'
 import useCartState from '@/lib/state/CartState'
+import { triggerAnimation } from '@/components/products/addToCartTrigger'
 
 interface Product {
   product: ProductData
@@ -16,8 +17,6 @@ interface Product {
 
 const ProductCard: React.FC<Product> = ({ product }) => {
   const route = useRouter()
-  const [animate, setAnimate] = useState(false)
-  const [coords, setCoords] = useState({ startX: 0, startY: 0, endX: 0, endY: 0 })
   const imgRef = useRef<HTMLImageElement>(null)
 
   const onClick = () => {
@@ -31,43 +30,18 @@ const ProductCard: React.FC<Product> = ({ product }) => {
     open(product)
   }
 
-  // cart handler state 
-  const { addItem } = useCartState()
+  // cart handler state
+  const { addItem, items } = useCartState()
+
+  const existingItem = items.find((item) => item.id === product.id)
+
   const onAddToCart: MouseEventHandler<HTMLButtonElement> = (event) => {
     event.stopPropagation()
     addItem(product)
-    triggerAnimation()
-  }
-
-  const triggerAnimation = () => {
-    if (imgRef.current) {
-      const cartIcon = document.getElementById('cart-icon')
-      const imgRect = imgRef.current.getBoundingClientRect()
-      const cartRect = cartIcon?.getBoundingClientRect()
-
-      if (cartRect) {
-        console.log('Image Position:', imgRect)
-        console.log('Cart Icon Position:', cartRect)
-
-        setCoords({
-          startX: imgRect.left,
-          startY: imgRect.top,
-          endX: cartRect.left,
-          endY: cartRect.top
-        })
-        setAnimate(true)
-      }
+    if (!existingItem) {
+      triggerAnimation(imgRef)
     }
   }
-
-  useEffect(() => {
-    if (animate) {
-      const timer = setTimeout(() => {
-        setAnimate(false)
-      }, 1000) // Duration of the animation
-      return () => clearTimeout(timer)
-    }
-  }, [animate])
 
   return (
     <div
@@ -86,12 +60,12 @@ const ProductCard: React.FC<Product> = ({ product }) => {
         <div className="opacity-0 group-hover:opacity-100 transition absolute w-full px-6 bottom-5">
           <div className="flex justify-center gap-x-4">
             <ButtonIcon
-              icon={<Scaling size={15} color='white' />}
+              icon={<Scaling size={15} color="white" />}
               onClick={onPreview}
             />
             <ButtonIcon
               onClick={onAddToCart}
-              icon={<ShoppingCart size={15} color='white' />}
+              icon={<ShoppingCart size={15} color="white" />}
             />
           </div>
         </div>
@@ -107,20 +81,6 @@ const ProductCard: React.FC<Product> = ({ product }) => {
       </div>
       {/* price */}
       <Currency data={product.price} />
-      {animate && (
-        <div
-          className="fixed w-20 h-20 bg-no-repeat bg-contain pointer-events-none"
-          style={{
-            zIndex:'100',
-            backgroundImage: `url(${product.images[0].url})`,
-            top: coords.startY,
-            left: coords.startX,
-            transition: 'transform 1s ease-out, opacity 1s ease-out',
-            transform: `translate(${coords.endX - coords.startX}px, ${coords.endY - coords.startY}px) scale(0.1)`,
-            opacity: 0
-          }}
-        />
-      )}
     </div>
   )
 }
