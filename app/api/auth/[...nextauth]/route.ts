@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import type { AuthOptions } from "next-auth";
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
@@ -28,18 +28,6 @@ export const authOptions: AuthOptions = {
   jwt: {
     secret: process.env.NEXTAUTH_SECRET, // Ensure this secret is the same in both projects
   },
-  // cookies: {
-  //   sessionToken: {
-  //     name: `next-auth.session-token`,
-  //     options: {
-  //       httpOnly: true,
-  //       secure: process.env.NODE_ENV === 'production', // True in production
-  //       sameSite: "none",
-  //       path: "/",
-  //     },
-  //   },
-  // },
-  
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -58,7 +46,6 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  
 };
 
 const handler = NextAuth(authOptions);
