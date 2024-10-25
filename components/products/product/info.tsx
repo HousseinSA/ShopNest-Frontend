@@ -28,31 +28,32 @@ const Info: React.FC<InfoProps> = ({ product, imgRef }) => {
 
   return (
     <div>
-      <h1 className=" text-xl sm:text-3xl font-bold text-primary">{CapitalizedFirstLetter(product.name)}</h1>
+      <h1 className=" text-xl sm:text-xl md:text-2xl font-semibold text-primary ">{CapitalizedFirstLetter(product.name)}</h1>
       <div className="flex items-end mt-3">
-        <Currency className="text-2xl text-highlight" data={product.price} />
+        <Currency className="text-xl text-highlight" data={product.price} />
       </div>
       <hr className="my-3" />
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-x-4">
-          <h3 className="font-bold text-primary">Size:</h3>
-          <div className="font-semibold text-highlight capitalize">{product.size.name}</div>
+        <div className="flex items-center gap-x-1">
+          <h3 className="font-semibold text-primary">Brand:</h3>
+          <div className=" text-highlight capitalize">{product.brand}</div>
         </div>
-        <div className="flex items-center gap-x-4">
-          <h3 className="font-bold text-primary">Color:</h3>
-          {product.color.value === 'white' ? (
-            <div className="font-semibold capitalize text-highlight ">white</div>
-          ) : (
-            <div
-              className="w-10 h-10 text-highlight  rounded-full"
-              style={{ background: product.color.value }}
-            ></div>
-          )}
+        <div className="flex  gap-x-1">
+          <h3 className="font-semibold text-primary">Description:</h3>
+          <div className=" text-highlight ">{product.description}</div>
+        </div>
+        <div className="flex items-center gap-x-1">
+          <h3 className="font-semibold text-primary">Size:</h3>
+          <div className="text-highlight capitalize">{product.size.name}</div>
+        </div>
+        <div className="flex items-center gap-x-1">
+          <h3 className="font-semibold text-primary">Color:</h3>
+        <div className=" capitalize text-highlight "> {product.color.name }</div> 
         </div>
         <div className="mt-2">
           <Button
             onClick={onAddItem}
-            className="bg-primary flex gap-x-2 hover:primary-foreground"
+            className="bg-primary flex gap-x-1 hover:primary-foreground"
           >
             <ShoppingCart />
             Add To Cart

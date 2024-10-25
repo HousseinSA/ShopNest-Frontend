@@ -22,7 +22,6 @@ const ProductCard: React.FC<Product> = ({ product }) => {
   const onClick = () => {
     route.push(`/product/${product.id}`)
   }
-
   // previewModal handler state
   const { open } = usePreviewModal()
   const onPreview: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -50,10 +49,10 @@ const ProductCard: React.FC<Product> = ({ product }) => {
     >
       <div className=" aspect-square relative bg-white rounded-xl">
         <CldImage
-          removeBackground
+          //removeBackground
           ref={imgRef}
           fill
-          src={product.images[0].url}
+          src={product.images[0]?.url}
           alt={product.name}
           className="w-full h-full object-contain object-center rounded-xl"
         />
@@ -72,10 +71,10 @@ const ProductCard: React.FC<Product> = ({ product }) => {
       </div>
       {/* description */}
       <div>
-        <p className="font-bold text-lg text-primary">
+        <p className="font-bold text-md text-primary">
           {CapitalizedFirstLetter(product.category.name)}
         </p>
-        <p className="text-sm font-semibold text-highlight m-0">
+        <p className="text-base text-highlight m-0">
           {CapitalizedFirstLetter(product.name)}
         </p>
       </div>
