@@ -1,5 +1,3 @@
-// app/api/auth/authOptions.ts
-
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthOptions } from "next-auth";
 
@@ -20,28 +18,44 @@ export const authOptions: NextAuthOptions = {
     },
   ],
   pages: {
-    signIn: '/auth/signin', // Custom sign-in page
+    signIn: '/auth/signin',
   },
   session: {
-    strategy: "jwt", // Use JWT strategy for sessions
+    strategy: "jwt",
+  },
+  cookies: {
+    sessionToken: {
+      name: process.env.NODE_ENV === 'production' 
+        ? `__Secure-next-auth.session-token`
+        : `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
   },
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET, // Ensure this secret is the same in both projects
+    secret: process.env.NEXTAUTH_SECRET,
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        console.log("JWT callback:", token);
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         if (!session.user) {
-          session.user = {}; // Ensure session.user is defined
+          session.user = {};
         }
-        // @ts-expect-error: Assigning user ID to session.user since TypeScript does not recognize session.user as a complete type.
-        session.user.id = token.id; // Assign user ID
+
+       // @ts-expect-error: Assigning user ID to session.user since TypeScript does not recognize session.user as a complete type.
+        session.user.id = token.id;
+        console.log("Session callback:", session);
       }
       return session;
     },
