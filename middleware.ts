@@ -4,16 +4,15 @@ import type { NextRequest } from 'next/server';
 export function middleware(req: NextRequest) {
   const res = NextResponse.next();
 
-  // Get the origin from the request
-  const origin = req.headers.get('origin');
-
-  // Set CORS headers to allow requests from specific URLs
+  // Define allowed origins
   const allowedOrigins = [
+    'https://shopnest-frontend.vercel.app',
     'https://shopnest-dashboard.vercel.app',
-    'http://localhost:3001', // Add your localhost URL here
+    'http://localhost:3001', // Local development URL
   ];
 
-  // Check if the request's origin is in the allowed origins
+  // Check the origin of the request
+  const origin = req.headers.get('origin');
   if (allowedOrigins.includes(origin || '')) {
     res.headers.set('Access-Control-Allow-Origin', origin!);
     res.headers.set('Access-Control-Allow-Credentials', 'true');
@@ -28,6 +27,7 @@ export function middleware(req: NextRequest) {
   return res;
 }
 
+// Apply middleware to relevant routes
 export const config = {
-  matcher: ['/api/auth/:path*'], // Apply middleware to your auth API routes only
+  matcher: ['/api/auth/:path*'], // Ensure middleware covers auth routes in both apps
 };
